@@ -4,8 +4,8 @@ import axios from "axios";
 
 const utilities = () => {
 
-    const BearerKey="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc0ODY2NjI5OSwiaWF0IjoxNzQ4MDYxNDk5fQ.Mn1ltEnyv6tupoeL4Zs0-3jtKUA-zejBbd6ZvlQQZwY";
-    const ipAdresse="192.168.150.102";
+    const BearerKey="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc1NDM4Mzg4MiwiaWF0IjoxNzUzNzc5MDgyfQ.4Ey5EsNGsB4JBKidEP27UMps7gMiMBT0sWHqZFV6RiY";
+    const ipAdresse="https://miraapi.onrender.com";
 
     return {BearerKey,ipAdresse};
 }

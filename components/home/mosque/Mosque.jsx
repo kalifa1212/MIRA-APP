@@ -15,7 +15,7 @@ const Mosque=()=> {
   const [isloading, setIsloading] = useState(true);
   const [error, setError] = useState(null);
   const config = new Configuration({
-    basePath: 'http://192.168.150.102:8080',
+    basePath: 'https://miraapi.onrender.com',
   });
   const mosqueController = new MosqueControllerApi(config,axiosInterceptor);
   const router=useRouter();
