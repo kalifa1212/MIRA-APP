@@ -6,21 +6,14 @@
     },
     "plugins": [
       "expo-router"
-      // [
-      //   "expo-splash-screen",
-      //   {
-      //     "image": "./assets/splash.png",
-      //   "imageWidth": 200
-      //   }
-      // ]
     ],
     "name": "MIRA",
-    "slug": "MIRA",
+    "slug": "m_apptuto",
     "version": "1.0.0",
     "orientation": "portrait",
     "splash": {
-      "image": "./assets/images/mira.png", // ton image (640x1136 ou +)
-      "resizeMode": "contain", // ou "cover"
+      "image": "./assets/images/mira.png",
+      "resizeMode": "contain",
       "backgroundColor": "#f8b500"
     },
     "extra": {
@@ -34,6 +27,7 @@
     "android": {
       "package": "com.kallifa12.m_apptuto"
     },
-    "newArchEnabled": true
+    "newArchEnabled": true,
+    "owner": "kallifa12"
   }
 }

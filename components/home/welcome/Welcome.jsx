@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from "react";
 import {
   View,
   TextInput,
@@ -10,20 +10,20 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  Animated
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import utilities from '../../../hook/utilities';
-import MosqueCard from '../../../components/common/cards/mosque/MosqueCard';
-import PredicationCard from '../../../components/common/cards/predication/PredicationCard';
-import { COLORS } from '../../../constants';
+  Animated,
+} from "react-native";
+import { Feather } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import utilities from "../../../hook/utilities";
+import MosqueCard from "../../../components/common/cards/mosque/MosqueCard";
+import PredicationCard from "../../../components/common/cards/predication/PredicationCard";
+import { COLORS } from "../../../constants";
 
 const Welcome = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [searchType, setSearchType] = useState('mosque');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterCriterion, setFilterCriterion] = useState('nom');
+  const [searchType, setSearchType] = useState("mosque");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCriterion, setFilterCriterion] = useState("nom");
   const [mosques, setMosques] = useState([]);
   const [predications, setPredications] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -32,14 +32,15 @@ const Welcome = () => {
 
   const router = useRouter();
   const { BearerKey, ipAdresse } = utilities();
-  let endpoint = searchType === 'mosque' 
-    ? `mosque/find/${filterCriterion}/` 
-    : `predication/find/${filterCriterion}/`;
+  let endpoint =
+    searchType === "mosque"
+      ? `mosque/find/${filterCriterion}/`
+      : `predication/find/${filterCriterion}/`;
 
   const resetSearch = () => {
-    setSearchQuery('');
-    setSearchType('mosque');
-    setFilterCriterion('nom');
+    setSearchQuery("");
+    setSearchType("mosque");
+    setFilterCriterion("nom");
     setMosques([]);
     setPredications([]);
     setLoading(false);
@@ -50,24 +51,24 @@ const Welcome = () => {
     if (!searchQuery.trim()) return;
 
     setLoading(true);
-    setDataLoaded(false); 
+    setDataLoaded(false);
 
     try {
       const response = await fetch(
         `http://${ipAdresse}:8080/muslimApi/v1/${endpoint}${searchQuery}?page=0&taille=2`,
         {
           method: "GET",
-          headers: { 'Authorization': 'Bearer ' + BearerKey }
-        }
+          headers: { Authorization: "Bearer " + BearerKey },
+        },
       );
       const data = await response.json();
-      
-      if (searchType === 'mosque') {
+
+      if (searchType === "mosque") {
         setMosques(data.content || []);
       } else {
         setPredications(data.content || []);
       }
-      
+
       setDataLoaded(true);
       // Animation pour afficher la liste des résultats
       Animated.timing(listOpacity, {
@@ -83,23 +84,33 @@ const Welcome = () => {
     }
   };
 
-  const navigation="nave"
+  const navigation = "nave";
   const handleNavigateToResults = () => {
     router.push({
       pathname: `/search/${navigation}`, // Ex: "/search/mosque"
       params: {
         searchType,
-        data: JSON.stringify(searchType === 'mosque' ? mosques : predications), // Convertir en string pour éviter les problèmes
-        loading
-      }
+        data: JSON.stringify(searchType === "mosque" ? mosques : predications), // Convertir en string pour éviter les problèmes
+        loading,
+      },
     });
   };
 
   const renderItem = ({ item }) => {
-    if (searchType === 'mosque') {
-      return <MosqueCard mosque={item} handleNavigate={() => router.push(`/mosque-details/${item.id}`)} />;
-    } else if (searchType === 'predication') {
-      return <PredicationCard item={item} handleCardPress={() => router.push(`/predication-details/${item.id}`)} />;
+    if (searchType === "mosque") {
+      return (
+        <MosqueCard
+          mosque={item}
+          handleNavigate={() => router.push(`/mosque-details/${item.id}`)}
+        />
+      );
+    } else if (searchType === "predication") {
+      return (
+        <PredicationCard
+          item={item}
+          handleCardPress={() => router.push(`/predication-details/${item.id}`)}
+        />
+      );
     }
     return null;
   };
@@ -127,7 +138,12 @@ const Welcome = () => {
   return (
     <View style={styles.container}>
       <View style={styles.searchBar}>
-        <Feather name="search" size={20} color="#6c757d" style={styles.searchIcon} />
+        <Feather
+          name="search"
+          size={20}
+          color="#6c757d"
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.input}
           placeholder="Rechercher"
@@ -147,49 +163,117 @@ const Welcome = () => {
       </View>
 
       {/* MODAL */}
-      <Modal transparent={true} visible={modalVisible} onRequestClose={closeModal}>
-        <Animated.View style={[styles.modalContainer, { transform: [{ translateY: modalTranslateY }] }]}>
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+      >
+        <Animated.View
+          style={[
+            styles.modalContainer,
+            { transform: [{ translateY: modalTranslateY }] },
+          ]}
+        >
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Choisir un filtre</Text>
             <TouchableOpacity
-              style={[styles.optionButton, searchType === 'mosque' && styles.optionButtonSelected]}
-              onPress={() => { setSearchType('mosque'); setFilterCriterion('nom'); closeModal(); }}>
-              <Text style={styles.optionText}>🕌 Rechercher dans les Mosquées</Text>
+              style={[
+                styles.optionButton,
+                searchType === "mosque" && styles.optionButtonSelected,
+              ]}
+              onPress={() => {
+                setSearchType("mosque");
+                setFilterCriterion("nom");
+                closeModal();
+              }}
+            >
+              <Text style={styles.optionText}>
+                🕌 Rechercher dans les Mosquées
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.optionButton, searchType === 'predication' && styles.optionButtonSelected]}
-              onPress={() => { setSearchType('predication'); setFilterCriterion('nom'); closeModal(); }}>
-              <Text style={styles.optionText}>📖 Rechercher dans les Prédications</Text>
+              style={[
+                styles.optionButton,
+                searchType === "predication" && styles.optionButtonSelected,
+              ]}
+              onPress={() => {
+                setSearchType("predication");
+                setFilterCriterion("nom");
+                closeModal();
+              }}
+            >
+              <Text style={styles.optionText}>
+                📖 Rechercher dans les Prédications
+              </Text>
             </TouchableOpacity>
-            {searchType === 'mosque' && (
+            {searchType === "mosque" && (
               <>
                 <TouchableOpacity
-                  style={[styles.optionButton, filterCriterion === 'nom' && styles.optionButtonSelected]}
-                  onPress={() => { setFilterCriterion('nom'); closeModal(); }}>
+                  style={[
+                    styles.optionButton,
+                    filterCriterion === "nom" && styles.optionButtonSelected,
+                  ]}
+                  onPress={() => {
+                    setFilterCriterion("nom");
+                    closeModal();
+                  }}
+                >
                   <Text style={styles.optionText}>Rechercher par Nom</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.optionButton, filterCriterion === 'localisation' && styles.optionButtonSelected]}
-                  onPress={() => { setFilterCriterion('localisation'); closeModal(); }}>
+                  style={[
+                    styles.optionButton,
+                    filterCriterion === "localisation" &&
+                      styles.optionButtonSelected,
+                  ]}
+                  onPress={() => {
+                    setFilterCriterion("localisation");
+                    closeModal();
+                  }}
+                >
                   <Text style={styles.optionText}>Rechercher par Ville</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.optionButton, filterCriterion === 'vendredi' && styles.optionButtonSelected]}
-                  onPress={() => { setFilterCriterion('vendredi'); closeModal(); }}>
-                  <Text style={styles.optionText}>Rechercher par Mosquée du Vendredi</Text>
+                  style={[
+                    styles.optionButton,
+                    filterCriterion === "vendredi" &&
+                      styles.optionButtonSelected,
+                  ]}
+                  onPress={() => {
+                    setFilterCriterion("vendredi");
+                    closeModal();
+                  }}
+                >
+                  <Text style={styles.optionText}>
+                    Rechercher par Mosquée du Vendredi
+                  </Text>
                 </TouchableOpacity>
               </>
             )}
-            {searchType === 'predication' && (
+            {searchType === "predication" && (
               <>
                 <TouchableOpacity
-                  style={[styles.optionButton, filterCriterion === 'theme' && styles.optionButtonSelected]}
-                  onPress={() => { setFilterCriterion('theme'); closeModal(); }}>
+                  style={[
+                    styles.optionButton,
+                    filterCriterion === "theme" && styles.optionButtonSelected,
+                  ]}
+                  onPress={() => {
+                    setFilterCriterion("theme");
+                    closeModal();
+                  }}
+                >
                   <Text style={styles.optionText}>Rechercher par Thème</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.optionButton, filterCriterion === 'type' && styles.optionButtonSelected]}
-                  onPress={() => { setFilterCriterion('type'); closeModal(); }}>
+                  style={[
+                    styles.optionButton,
+                    filterCriterion === "type" && styles.optionButtonSelected,
+                  ]}
+                  onPress={() => {
+                    setFilterCriterion("type");
+                    closeModal();
+                  }}
+                >
                   <Text style={styles.optionText}>Rechercher par Type</Text>
                 </TouchableOpacity>
               </>
@@ -202,10 +286,17 @@ const Welcome = () => {
       </Modal>
 
       {loading ? (
-        <ActivityIndicator size="large" color={COLORS.primary} style={styles.loader} />
+        <ActivityIndicator
+          size="large"
+          color={COLORS.primary}
+          style={styles.loader}
+        />
       ) : (
         dataLoaded && (
-          <TouchableOpacity onPress={handleNavigateToResults} style={styles.searchButton}>
+          <TouchableOpacity
+            onPress={handleNavigateToResults}
+            style={styles.searchButton}
+          >
             <Text style={styles.searchButtonText}>Voir les résultats</Text>
           </TouchableOpacity>
         )
@@ -213,11 +304,15 @@ const Welcome = () => {
 
       {/* Liste des résultats */}
       <Animated.FlatList
-        data={searchType === 'mosque' ? mosques : predications}
-        keyExtractor={(item) => item.id ? item.id.toString() : item.name}
+        data={searchType === "mosque" ? mosques : predications}
+        keyExtractor={(item) => (item.id ? item.id.toString() : item.name)}
         renderItem={renderItem}
         style={{ opacity: listOpacity }} // L'animation de la liste
-        ListFooterComponent={() => loading ? <ActivityIndicator size="large" color={COLORS.primary} /> : null}
+        ListFooterComponent={() =>
+          loading ? (
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          ) : null
+        }
       />
     </View>
   );
@@ -225,18 +320,53 @@ const Welcome = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#f8f9fa" },
-  searchBar: { flexDirection: "row", alignItems: "center", backgroundColor: "#fff", borderRadius: 10, paddingHorizontal: 15 },
+  searchBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingHorizontal: 15,
+  },
   searchIcon: { marginRight: 10 },
   input: { flex: 1, height: 50, fontSize: 16, color: "#333" },
-  filterButton: { backgroundColor: "#007bff", padding: 12, borderRadius: 5, marginRight: 10 },
+  filterButton: {
+    backgroundColor: "#007bff",
+    padding: 12,
+    borderRadius: 5,
+    marginRight: 10,
+  },
   resetButton: { backgroundColor: "#007bff", padding: 8, borderRadius: 5 },
-  searchButton: { backgroundColor: "#28a745", padding: 15, borderRadius: 8, alignItems: "center", marginTop: 10 },
+  searchButton: {
+    backgroundColor: "#28a745",
+    padding: 15,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
   searchButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
   loader: { marginTop: 15 },
-  modalContainer: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "rgba(0, 0, 0, 0.5)" },
-  modalContent: { width: "80%", backgroundColor: "white", padding: 20, borderRadius: 10, alignItems: "center" },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
   modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 15 },
-  optionButton: { backgroundColor: "#f1f1f1", padding: 12, borderRadius: 8, marginVertical: 5, width: "100%", alignItems: "center" },
+  optionButton: {
+    backgroundColor: "#f1f1f1",
+    padding: 12,
+    borderRadius: 8,
+    marginVertical: 5,
+    width: "100%",
+    alignItems: "center",
+  },
   optionButtonSelected: { backgroundColor: "#007bff" },
   optionText: { fontSize: 16, color: "#333" },
   closeButton: { marginTop: 15 },

@@ -8,16 +8,22 @@
       "developmentClient": true,
       "distribution": "internal"
     },
+
     "preview": {
-      "distribution": "internal"
-    },
-    "production": {
+      "distribution": "internal",
       "android": {
-        "buildType": "apk"  // Génère un .aab pour Google Play
-      },
-      "autoIncrement": true
+        "buildType": "apk"
+      }
+    },
+
+    "production": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      }
     }
   },
+
   "submit": {
     "production": {}
   }
