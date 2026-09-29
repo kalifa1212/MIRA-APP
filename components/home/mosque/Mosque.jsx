@@ -1,22 +1,50 @@
-import React, { Component, useState } from 'react';
-import { View ,Text,TouchableOpacity,FlatList,ActivityIndicator } from 'react-native';
-import { useRouter } from 'expo-router';
-import styles from './mosque.style';
-import { COLORS } from '../../../constants';
-import useFetch from '../../../hook/useFetch';
-import MosqueCard from '../../common/cards/mosque/MosqueCard';
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { useRouter } from "expo-router";
+import styles from "./mosque.style";
+import { COLORS } from "../../../constants";
+//import useFetch from '../../../hook/useFetch';
+import MosqueCard from "../../common/cards/mosque/MosqueCard";
+import { MosqueControllerApi, Configuration } from "../../../hook/rn-client";
+import axiosInterceptor from "../../../app/services";
 
+const Mosque = () => {
+  const [data, setData] = useState([]);
+  const [isloading, setIsloading] = useState(true);
+  const [error, setError] = useState(null);
+  const config = new Configuration({
+    basePath: "http://localhost:8080",
+  });
+  const mosqueController = new MosqueControllerApi(config, axiosInterceptor);
+  const router = useRouter();
+  const mosque = "Mosquée";
 
-const Mosque=()=> {
+  useEffect(() => {
+    mosqueController
+      .countAll()
+      .then((rest) => {
+        console.log(rest.data);
+      })
+      .catch((err) => {
+        console.log("mosque** ", err);
+      });
+    mosqueController
+      .findAll2()
+      .then((res) => {
+        setData(res.data.content); // ou res.data selon ta réponse
+        setIsloading(false);
+      })
+      .catch((err) => {
+        setError(err);
+        setIsloading(false);
+        console.log("❌ Erreur Axios :");
+        console.log("Config- :", err.config.url);
+        console.log("mosquen -- ", err);
+      });
+  }, []);
 
-  const router=useRouter();
-  const mosque="Mosquée";
-  const {data,isloading,error}=useFetch(
-    'mosque/find/all/',{
-      taille:2,
-    }
-  )
-  //console.log(error);
+  if (isloading) return <Text>Chargement...</Text>;
+  if (error) return <Text>Erreur: {error.message}</Text>;
 
   return (
     <View style={styles.container}>
@@ -34,18 +62,17 @@ const Mosque=()=> {
           <Text>Une erreur c'est produite</Text>
         ) : (
           data?.map((mosque) => (
-            <MosqueCard 
-                 mosque={mosque}
-                 key={`mosque-${mosque?.id}`}
-                 handleNavigate={() => router.push(`/mosque-details/${mosque?.id}`)}
-               />
+            <MosqueCard
+              mosque={mosque}
+              key={`mosque-${mosque?.id}`}
+              handleNavigate={() =>
+                router.push(`/mosque-details/${mosque?.id}`)
+              }
+            />
           ))
-        )
-      }
+        )}
       </View>
-
     </View>
-  )
-
-  }
-export default Mosque
+  );
+};
+export default Mosque;

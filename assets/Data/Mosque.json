@@ -1,0 +1,135 @@
+{
+    "content": [
+      {
+        "id": 1,
+        "nom": "Mosquée Centrale",
+        "code": "MC001",
+        "imam": "Imam Ali",
+        "superficie": 500,
+        "photo": "mosquee_centrale.jpg",
+        "description": "Grande mosquée au centre-ville.",
+        "balte": "2025-02-19T21:52:58.293Z",
+        "asr": "2025-02-19T22:52:58.293Z",
+        "magrib": "2025-02-19T23:52:58.293Z",
+        "icha": "2025-02-20T00:52:58.293Z",
+        "soub": "2025-02-20T05:52:58.293Z",
+        "zour": "2025-02-20T12:52:58.293Z",
+        "djouma": "2025-02-20T13:52:58.293Z",
+        "isVendredi": true,
+        "quartier": "Centre-Ville",
+        "longitude": 12.345678,
+        "latitude": -12.345678,
+        "localisation": {
+          "id": 1,
+          "ville": "Dakar",
+          "pays": "Sénégal",
+          "description": "Au cœur de la ville."
+        }
+      },
+      {
+        "id": 2,
+        "nom": "Mosquée El Nour",
+        "code": "EN002",
+        "imam": "Imam Oumar",
+        "superficie": 300,
+        "photo": "mosquee_el_nour.jpg",
+        "description": "Mosquée de quartier avec une belle architecture.",
+        "balte": "2025-02-19T21:52:58.293Z",
+        "asr": "2025-02-19T22:52:58.293Z",
+        "magrib": "2025-02-19T23:52:58.293Z",
+        "icha": "2025-02-20T00:52:58.293Z",
+        "soub": "2025-02-20T05:52:58.293Z",
+        "zour": "2025-02-20T12:52:58.293Z",
+        "djouma": "2025-02-20T13:52:58.293Z",
+        "isVendredi": true,
+        "quartier": "Medina",
+        "longitude": 12.456789,
+        "latitude": -12.456789,
+        "localisation": {
+          "id": 2,
+          "ville": "Dakar",
+          "pays": "Sénégal",
+          "description": "Dans le quartier Medina."
+        }
+      },
+        {
+          "id": 3,
+          "nom": "Mosquée El Nour",
+          "code": "EN002",
+          "imam": "Imam Oumar",
+          "superficie": 300,
+          "photo": "mosquee_el_nour.jpg",
+          "description": "Mosquée de quartier avec une belle architecture.",
+          "balte": "2025-02-19T21:52:58.293Z",
+          "asr": "2025-02-19T22:52:58.293Z",
+          "magrib": "2025-02-19T23:52:58.293Z",
+          "icha": "2025-02-20T00:52:58.293Z",
+          "soub": "2025-02-20T05:52:58.293Z",
+          "zour": "2025-02-20T12:52:58.293Z",
+          "djouma": "2025-02-20T13:52:58.293Z",
+          "isVendredi": true,
+          "quartier": "Medina",
+          "longitude": 12.456789,
+          "latitude": -12.456789,
+          "localisation": {
+            "id": 2,
+            "ville": "Dakar",
+            "pays": "Sénégal",
+            "description": "Dans le quartier Medina."
+          }
+        },
+          {
+            "id": 4,
+            "nom": "Mosquée El Nour",
+            "code": "EN002",
+            "imam": "Imam Oumar",
+            "superficie": 300,
+            "photo": "mosquee_el_nour.jpg",
+            "description": "Mosquée de quartier avec une belle architecture.",
+            "balte": "2025-02-19T21:52:58.293Z",
+            "asr": "2025-02-19T22:52:58.293Z",
+            "magrib": "2025-02-19T23:52:58.293Z",
+            "icha": "2025-02-20T00:52:58.293Z",
+            "soub": "2025-02-20T05:52:58.293Z",
+            "zour": "2025-02-20T12:52:58.293Z",
+            "djouma": "2025-02-20T13:52:58.293Z",
+            "isVendredi": true,
+            "quartier": "Medina",
+            "longitude": 12.456789,
+            "latitude": -12.456789,
+            "localisation": {
+              "id": 2,
+              "ville": "Dakar",
+              "pays": "Sénégal",
+              "description": "Dans le quartier Medina."
+            }
+          },
+            {
+              "id": 5,
+              "nom": "Mosquée El Nour",
+              "code": "EN002",
+              "imam": "Imam Oumar",
+              "superficie": 300,
+              "photo": "mosquee_el_nour.jpg",
+              "description": "Mosquée de quartier avec une belle architecture.",
+              "balte": "2025-02-19T21:52:58.293Z",
+              "asr": "2025-02-19T22:52:58.293Z",
+              "magrib": "2025-02-19T23:52:58.293Z",
+              "icha": "2025-02-20T00:52:58.293Z",
+              "soub": "2025-02-20T05:52:58.293Z",
+              "zour": "2025-02-20T12:52:58.293Z",
+              "djouma": "2025-02-20T13:52:58.293Z",
+              "isVendredi": true,
+              "quartier": "Medina",
+              "longitude": 12.456789,
+              "latitude": -12.456789,
+              "localisation": {
+                "id": 2,
+                "ville": "Dakar",
+                "pays": "Sénégal",
+                "description": "Dans le quartier Medina."
+              }
+            }
+    ]
+  }
+  

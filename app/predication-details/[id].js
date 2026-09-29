@@ -5,82 +5,52 @@ import {
 } from 'react-native';
 import { useRouter, Stack, useLocalSearchParams } from 'expo-router';
 import { COLORS, SIZES, icons } from '../../constants';
+import { PredicationControllerApi,Configuration } from "../../hook/rn-client";
 import axios from 'axios';
-import ScreenHeaderBtn from '../../components/common/header/ScreenHeaderBtn';
 import utilities from "../../hook/utilities";
 import { Ionicons } from '@expo/vector-icons';
+import axiosInterceptor from "../services";
 
 const PredicationDetails = () => {
+
+//--test
+const [isloading, setIsloading] = useState(true);
+  const [error, setError] = useState(null);
+  const config = new Configuration({});
+  const predicationControllerApi = new PredicationControllerApi(config);
   const params = useLocalSearchParams();
   const router = useRouter();
-  const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState([]);
-  const [imam, setImam] = useState([]);
   const [mosque, setMosque] = useState([]);
-  const [isloading, setIsloading] = useState(false);
-  const [error, setError] = useState(null);
-  const { BearerKey, ipAdresse } = utilities();
-  const [test, setTest] = useState(false);
-
-  const onRefresh = () => {
-    // Logic to refresh data
-  };
+  const [imam, setImam] = useState([]);
 
   useEffect(() => {
-    const handleSearch = async () => {
-      setIsloading(true);
-      setData([]);
-      try {
-        const options = {
-          method: "GET",
-          url: `http://${ipAdresse}:8080/muslimApi/v1/predication/${params.id}`,
-          headers: {
-            'Authorization': 'Bearer ' + BearerKey
-          },
-        };
-        const response = await axios.request(options);
-        setData(response.data);
-        if (response.data.idImam !== 0) {
-          handleImamMosque(response.data.idImam, "utilisateur/find/id/", false);
-        }
-        if (response.data.idMosque !== 0) {
-          handleImamMosque(response.data.idMosque, "mosque/find/", true);
-        }
-        setTest(true);
-      } catch (error) {
-        setError(error);
-      } finally {
-        setIsloading(false);
-      }
-    };
+    predicationControllerApi.findByIdPredication(params.id)
+    .then(res => {
+      setData(res.data); // ou res.data selon ta réponse
+      setIsloading(false);
+    })
+    .catch(err => {
+      setError(err);
+      setIsloading(false);
+    });
 
-    const handleImamMosque = async (id, endPoint, isMosque) => {
-      try {
-        const options = {
-          method: "GET",
-          url: `http://${ipAdresse}:8080/muslimApi/v1/${endPoint}${id}`,
-          headers: {
-            'Authorization': 'Bearer ' + BearerKey
-          },
-        };
-        const response = await axios.request(options);
-        if (isMosque) {
-          setMosque(response.data);
-        }
-        setImam(response.data);
-      } catch (error) {
-        console.log(error, "*****", endPoint, " ", id);
-      }
-    };
+  }, []);
 
-    handleSearch();
-  }, [test]);
+  const handleDownloadPredication = () => {
+
+  };
+  
+  const handleWatchLive = () => {
+
+  };
+  
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <Stack.Screen 
+      <Stack.Screen
         options={{
-          headerStyle: { backgroundColor: COLORS.white },
+          headerStyle: { backgroundColor: '#f8b500' },
           headerShadowVisible: true,
           headerBackVisible: false,
           headerLeft: () => (
@@ -88,13 +58,13 @@ const PredicationDetails = () => {
               <Ionicons name="arrow-back" size={24} color="black" />
             </TouchableOpacity>
           ),
-          headerTitle: ''
-        }} 
+          headerTitle: "data.theme",
+        }}
       />
-      
-      <ScrollView 
+
+      <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        //refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         contentContainerStyle={styles.scrollViewContent}
       >
         {isloading ? (
@@ -102,15 +72,28 @@ const PredicationDetails = () => {
         ) : error ? (
           <Text style={styles.errorText}>Une erreur est survenue</Text>
         ) : (
-          <View style={styles.contentContainer}>
-            <Text style={styles.predicationTitle}>Thème: {data.theme}</Text>
-            <View style={styles.predicationDetails}>
+          <View style={styles.contentWrapper}>
+            <Text style={styles.predicationTitle}>🎙️ Thème : {data.theme}</Text>
+
+            <View style={styles.card}>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.buttonDownload} onPress={handleDownloadPredication}>
+                  <Ionicons name="download-outline" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Télécharger</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.buttonLive} onPress={handleWatchLive}>
+                  <Ionicons name="play-circle-outline" size={20} color="#fff" />
+                  <Text style={styles.buttonText}>Suivre en direct</Text>
+                </TouchableOpacity>
+              </View>
               <DetailRow label="Type" value={data.type} />
               <DetailRow label="Date" value={data.date} />
               <DetailRow label="Prédicateur" value={imam.nom} />
               <DetailRow label="Lieu" value={mosque.nom} />
-              <DetailRow label="Autres informations" value={data.info} />
+              <DetailRow label="Informations" value={data.info} />
             </View>
+
           </View>
         )}
       </ScrollView>
@@ -120,8 +103,8 @@ const PredicationDetails = () => {
 
 const DetailRow = ({ label, value }) => (
   <View style={styles.detailRow}>
-    <Text style={styles.detailLabel}>{label}: </Text>
-    <Text style={styles.detailValue}>{value}</Text>
+    <Text style={styles.detailLabel}>{label}</Text>
+    <Text style={styles.detailValue}>{value || '—'}</Text>
   </View>
 );
 
@@ -131,34 +114,45 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.lightWhite,
   },
   scrollViewContent: {
-    paddingBottom: 20,
+    paddingHorizontal: 16,
+    paddingBottom: 30,
   },
   loader: {
-    marginTop: 20,
+    marginTop: 40,
   },
   errorText: {
     color: COLORS.red,
     textAlign: 'center',
-    marginTop: 20,
+    marginTop: 40,
     fontSize: 16,
+    fontWeight: '500',
   },
-  contentContainer: {
-    paddingHorizontal: SIZES.padding,
+  contentWrapper: {
+    marginTop: 20,
   },
   predicationTitle: {
-    fontSize: 22,
-    fontWeight: '600',
+    fontSize: 24,
+    fontWeight: '700',
     color: COLORS.primary,
-    marginVertical: 20,
+    textAlign: 'center',
+    marginBottom: 20,
   },
-  predicationDetails: {
-    marginTop: 10,
-    paddingBottom: 20,
+  card: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
   },
   detailRow: {
     flexDirection: 'row',
-    marginBottom: 15,
-    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderBottomColor: COLORS.lightGray,
+    borderBottomWidth: 1,
   },
   detailLabel: {
     fontSize: 16,
@@ -169,8 +163,10 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 16,
     color: COLORS.gray,
-    flex: 2,
+    flex: 1.5,
+    textAlign: 'right',
   },
 });
 
 export default PredicationDetails;
+

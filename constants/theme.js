@@ -1,11 +1,19 @@
 const COLORS = {
-  primary: "#312651",
-  secondary: "#444262",
-  tertiary: "#FF7754",
+  // Palette autour de #f8b500
+  primary: "#f8b500",       // Couleur principale (jaune/orangé)
+  primaryDark: "#c28f00",   // Variante plus foncée
+  primaryLight: "#ffcb33",  // Variante plus claire
+  primaryLighter: "#ffe580", // Encore plus claire (pour les fonds)
 
+  // Autres couleurs (peuvent être adaptées selon le besoin)
+  secondary: "#444262",     // Peut être adapté en fonction du thème général
+  tertiary: "#FF7754",      // Accent chaud
+
+  // Nuances de gris pour le texte et les fonds
   gray: "#83829A",
   gray2: "#C1C0C8",
 
+  // Blancs
   white: "#F3F4F8",
   lightWhite: "#FAFAFC",
 };

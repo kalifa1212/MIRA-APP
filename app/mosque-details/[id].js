@@ -63,7 +63,7 @@ const MosqueDetails = () => {
     <SafeAreaView style={{flex:1,backgroundColor:COLORS.lightWhite}}>
       <Stack.Screen 
         options={{
-          headerStyle:{backgroundColor:COLORS.lightWhite},
+          headerStyle:{ backgroundColor: '#f8b500' },
           headerShadowVisible:false,
           headerBackVisible:false,
           headerLeft:()=> (

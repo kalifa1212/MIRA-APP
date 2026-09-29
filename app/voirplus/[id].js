@@ -10,6 +10,7 @@ import MosqueCard from '../../components/common/cards/mosque/MosqueCard'
 import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/search'
 import utilities from '../../hook/utilities'
+import mosqueData from '../../assets/Data/Mosque.json'
 
 let test=0;
 const VoirPlus = () => {
@@ -52,6 +53,7 @@ const fetchMosques = async () => {
     }
     setLoading(false);
 };
+
 const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height - 50;
 };
@@ -65,7 +67,7 @@ return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
         <Stack.Screen
             options={{
-                headerStyle: { backgroundColor: COLORS.lightWhite },
+                headerStyle: { backgroundColor: '#f8b500' },
                 headerShadowVisible: false,
                 headerLeft: () => (
                    
@@ -81,26 +83,6 @@ return (
             }}
         />
         
-        {/* <FlatList
-            data={mosques}
-            renderItem={({ item }) => (
-                <MosqueCard
-                    mosque={item}
-                    handleNavigate={() => router.push(`/mosque-details/${item.id}`)}
-                />
-            )}
-            keyExtractor={(item) => item?.id}
-            contentContainerStyle={{ padding: SIZES.medium }}
-            
-            // Chargement automatique en bas de la list
-            onEndReached={fetchMosques}
-            onEndReachedThreshold={0.5} // Déclenche le chargement à 50% de la fin
-
-            // Indicateur de chargement en bas de liste
-            ListFooterComponent={() => (
-                loading ? <ActivityIndicator size="large" color={COLORS.primary} /> : null
-            )}
-        /> */}
         <ScrollView 
     contentContainerStyle={{ padding: SIZES.medium }} 
     onScroll={({ nativeEvent }) => {

@@ -1,111 +1,169 @@
-import React, { Component } from 'react';
-import {View ,Text,TouchableOpacity,Image} from 'react-native';
-import { useState } from 'react';
-//import styles from './mosqueCard.style';
-import useFetch from '../../../../hook/useFetch';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import utilities from '../../../../hook/utilities';
 import { COLORS, SIZES } from './constant';
 
-const MosqueCard=({mosque,handleNavigate})=> {
-  
-  const {BearerKey,ipAdresse}=utilities();
-  
-  const [isVendredi,setIsVendredi]=useState("oui");
+const MosqueCard = ({ mosque, handleNavigate }) => {
+  const { BearerKey, ipAdresse } = utilities();
 
-    return (
-      <TouchableOpacity 
-      style={styles.container} 
+  const [liked, setLiked] = useState(false);
+  const [favorited, setFavorited] = useState(false);
+  const [followed, setFollowed] = useState(false);
+
+  const toggleLike = () => setLiked(!liked);
+  const toggleFavorite = () => setFavorited(!favorited);
+  const toggleFollow = () => setFollowed(!followed);
+  const location =()=>{
+
+  }
+
+  return (
+    <TouchableOpacity
+      style={styles.container}
       onPress={handleNavigate}
       activeOpacity={0.8}
-  >
-      {/* Image de la mosquée */}
+    >
       <Image
-          source={{uri:`http://${ipAdresse}:8080/muslimApi/v1/image/display/${mosque.id}/mosque`}}
-          resizeMode='cover'
-          style={styles.image}
+        source={{ uri: `http://${ipAdresse}:8080/muslimApi/v1/image/display/${mosque.id}/mosque` }}
+        resizeMode='cover'
+        style={styles.image}
       />
 
-      {/* Contenu de la carte */}
       <View style={styles.content}>
-          {/* Titre et description */}
-          <View style={styles.header}>
-              <Text style={styles.title}>{mosque.nom}</Text>
-              <Text style={styles.description} numberOfLines={2}>
-                  {mosque.description ? mosque.description : "Aucune description disponible"}
-              </Text>
+        <View style={styles.header}>
+          <Text style={styles.title}>{mosque.nom}</Text>
+          <Text style={styles.description} numberOfLines={2}>
+            {mosque.description ? mosque.description : "Aucune description disponible"}
+          </Text>
+        </View>
+
+        <View style={styles.bottomRow}>
+          {/* Localisation */}
+          <TouchableOpacity onPress={location} style={styles.iconBtn}>
+          <Ionicons name="location-outline" size={20} color={COLORS.primary} />
+          </TouchableOpacity> 
+
+          {/* Prière vendredi */}
+          <View style={styles.vendrediInline}>
+          <Text style={styles.vendrediLabel}>Prière vendredi</Text>
+            <Text style={[styles.vendrediText, { color: mosque.isVendredi ? COLORS.green : COLORS.red }]}>
+              {mosque.isVendredi ? " Oui" : " Non"}
+            </Text>
+           
           </View>
 
-          {/* Localisation & Vendredi */}
-          <View style={styles.footer}>
-              <Text style={styles.location}>
-                  📍 {mosque.localisation?.ville}, {mosque.localisation?.pays}
-              </Text>
-              
-              <View style={styles.vendrediContainer}>
-                  <Text style={styles.vendrediText}>{mosque.isVendredi ? "✅ Oui" : "❌ Non"}</Text>
-                  <Text style={styles.vendrediLabel}>Prière du vendredi</Text>
-              </View>
+         
+
+          {/* Actions : like, fav, follow */}
+          <View style={styles.actionsInline}>
+            {/* <TouchableOpacity onPress={toggleLike} style={styles.iconBtn}>
+              <Ionicons name={liked ? "heart" : "heart-outline"} size={20} color={liked ? COLORS.red : COLORS.gray} />
+            </TouchableOpacity> */}
+            <TouchableOpacity onPress={toggleFavorite} style={styles.iconBtn}>
+              <Ionicons name={favorited ? "bookmark" : "bookmark-outline"} size={20} color={favorited ? COLORS.primary : COLORS.gray} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={toggleFollow} style={styles.iconBtn}>
+              <Ionicons name="add" size={28} color={followed ? COLORS.primary : COLORS.gray} />
+            </TouchableOpacity>
           </View>
+        </View>
+
       </View>
-  </TouchableOpacity>
-    )
-  }
-  const styles = {
-    container: {
-        backgroundColor: COLORS.white,
-        borderRadius: 15,
-        overflow: 'hidden',
-        marginBottom: SIZES.medium,
-        elevation: 3, // Ombre Android
-        shadowColor: '#000', // Ombre iOS
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-    },
-    image: {
-        width: '100%',
-        height: 150,
-        borderTopLeftRadius: 15,
-        borderTopRightRadius: 15,
-    },
-    content: {
-        padding: SIZES.medium,
-    },
-    header: {
-        marginBottom: SIZES.small,
-    },
-    title: {
-        fontSize: SIZES.large,
-        fontWeight: 'bold',
-        color: COLORS.primary,
-    },
-    description: {
-        fontSize: SIZES.medium,
-        color: COLORS.gray,
-        marginTop: 5,
-    },
-    footer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: SIZES.medium,
-    },
-    location: {
-        fontSize: SIZES.medium,
-        color: COLORS.darkGray,
-    },
-    vendrediContainer: {
-        alignItems: 'center',
-    },
-    vendrediText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: mosque => (mosque.isVendredi ? COLORS.green : COLORS.red),
-    },
-    vendrediLabel: {
-        fontSize: 12,
-        color: COLORS.gray,
-    },
+    </TouchableOpacity>
+  );
 };
-export default MosqueCard
 
+const styles = StyleSheet.create({
+  container: {
+
+    backgroundColor: COLORS.white,
+    borderRadius: 15,
+    overflow: 'hidden',
+    marginBottom: SIZES.medium,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+  },
+  image: {
+    width: '100%',
+    height: 150,
+  },
+  content: {
+    padding: SIZES.medium,
+  },
+  header: {
+    marginBottom: SIZES.small,
+  },
+  title: {
+    fontSize: SIZES.large,
+    fontWeight: 'bold',
+    color: COLORS.blue,
+  },
+  description: {
+    fontSize: SIZES.medium,
+    color: COLORS.gray,
+    marginTop: 5,
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: SIZES.medium,
+  },
+  location: {
+    fontSize: SIZES.medium,
+    color: COLORS.darkGray,
+  },
+  vendrediContainer: {
+    alignItems: 'center',
+  },
+  vendrediText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  vendrediLabel: {
+    fontSize: 12,
+    color: COLORS.gray,
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: SIZES.small,
+    gap: 12,
+  },
+  iconBtn: {
+    padding: 6,
+    backgroundColor: COLORS.lightWhite,
+    borderRadius: 20,
+  },
+  bottomRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: SIZES.medium,
+    gap: 10,
+  },
+  
+  actionsInline: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  
+  vendrediInline: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  
+  locationInline: {
+    fontSize: SIZES.medium,
+    color: COLORS.darkGray,
+  },
+});
+
+export default MosqueCard;

@@ -1,13 +1,23 @@
 
 export const COLORS = {
-    primary: "#007bff", // Bleu principal
-    white: "#ffffff",
-    black: "#000000",
-    gray: "#6c757d",
-    darkGray: "#343a40",
-    green: "#28a745", // Couleur pour "Oui"
-    red: "#dc3545", // Couleur pour "Non"
-  };
+  primary: "#f8b500",       // Jaune orangé principal
+  primaryLight: "#ffcb3d",  // Variante plus claire
+  primaryDark: "#c69200",   // Variante plus foncée
+  primarySoft: "#fff5da",   // Fond très doux pour les composants
+
+  white: "#ffffff",
+  black: "#000000",
+
+  blue:"#007bff",
+
+  gray: "#6c757d",          // Texte secondaire
+  lightGray: "#ced4da",     // Bordures / placeholders
+  darkGray: "#343a40",      // Texte fort / titres
+
+  green: "#28a745",         // Pour "Oui"
+  red: "#dc3545",           // Pour "Non"
+};
+
   
   export const SIZES = {
     small: 10,

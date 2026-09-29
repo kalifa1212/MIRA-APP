@@ -15,7 +15,7 @@ const Notifications = () => {
     <SafeAreaView style={{flex:1,backgroundColor:COLORS.lightWhite}}>
       <Stack.Screen 
         options={{
-          headerStyle:{backgroundColor:COLORS.lightWhite},
+          headerStyle:{ backgroundColor: '#f8b500' },
           headerShadowVisible:false,
           headerBackVisible:false,
           headerLeft:()=> (
@@ -29,7 +29,7 @@ const Notifications = () => {
         />
               ),
           
-          headerTitle:''
+          headerTitle:'Notification'
         }} 
       />
       <>
@@ -61,6 +61,16 @@ const sampleNotifications = [
   },
   {
     id: 2,
+    title: "Événement caritatif",
+    date: "20/02/2025",
+    time: "18:00",
+    description: "Ne manquez pas notre collecte de dons pour les nécessiteux.",
+    isRead: true,
+    isUpcoming: true,
+    //icon: require('../../assets/icon.png'), // Remplace avec une icône réelle
+  },
+  {
+    id: 3,
     title: "Événement caritatif",
     date: "20/02/2025",
     time: "18:00",

@@ -11,6 +11,7 @@ import PredicationCard from '../../components/common/cards/predication/Predicati
 import { COLORS, icons, SIZES } from '../../constants'
 import styles from '../../styles/search'
 import utilities from '../../hook/utilities'
+import PredicationData from '../../assets/Data/Predication.json'
 
 
 let test=0;
@@ -26,7 +27,6 @@ const VoirPlusPredi = () => {
     const [searchError, setSearchError] = useState(null);
     const [page, setPage] = useState(1);
 
-    //const BearerKey="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcxMTIyNTQ5MywiaWF0IjoxNzExMTg5NDkzfQ.KCc_HCYPUGRVSbjCI23lY7R_jcrYAors6EBfga76WgY";
     const handleSearch = async () => {
         setSearchLoader(true);
         setSearchResult([])
@@ -55,6 +55,22 @@ const VoirPlusPredi = () => {
         }
     };
    
+    //Loading data frome locale json file
+    // const loading=true
+    // const handleSearch = async () => {
+        
+    //     try {
+    //         if (__DEV__) {  // Mode développement, utiliser les données locales
+    //             console.log("Utilisation des données locales");
+    //            // const data = PredicationData; // Charger les données du fichier JSON
+    //             setSearchResult(PredicationData.content)
+               
+    //          }
+    //     } catch (error) {
+    //         console.error("Erreur lors du chargement de la liste des predication", error);
+    //     }
+    //     setLoading(false);
+    // };
 
     const handlePagination = (direction) => {
         let test1=test;
@@ -82,7 +98,7 @@ const VoirPlusPredi = () => {
         <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightWhite }}>
         <Stack.Screen
             options={{
-                headerStyle: { backgroundColor: COLORS.lightWhite },
+                headerStyle: { backgroundColor: '#f8b500' },
                 headerShadowVisible: false,
                 headerLeft: () => (
                     <Feather 
@@ -96,8 +112,29 @@ const VoirPlusPredi = () => {
                 headerTitle:"Liste Predication"
             }}
         />
-        
-        <FlatList
+        {/* //----------------------------- */}
+         <FlatList
+            data={searchResult}
+            renderItem={({ item }) => (
+                <PredicationCard
+                item={item}
+                handleCardPress={() =>  router.push(`/predication-details/${item.id}`)}
+            />
+            )}
+            keyExtractor={(item) => item?.id}
+            contentContainerStyle={{ padding: SIZES.medium, rowGap: SIZES.medium }}
+            
+            // Chargement automatique en bas de la list
+           // onEndReached={fetchMosques}
+           // onEndReachedThreshold={0.5} // Déclenche le chargement à 50% de la fin
+
+            // Indicateur de chargement en bas de liste
+            ListFooterComponent={() => (
+                searchLoader ? <ActivityIndicator size="large" color={COLORS.primary} /> : null
+            )}
+        />
+        {/* //---------------------------- */}
+        {/* <FlatList
                 data={searchResult}
                 renderItem={({ item }) => (
                     
@@ -149,7 +186,7 @@ const VoirPlusPredi = () => {
                         </TouchableOpacity>
                     </View>
                 )}
-            />
+            /> */}
 
     </SafeAreaView>
     )
